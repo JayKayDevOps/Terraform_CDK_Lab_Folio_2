@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-from cdktf_cdktf_provider_aws.vpc import Vpc
 from constructs import Construct
 from cdktf import App, TerraformStack
 from cdktf_cdktf_provider_aws.provider import AwsProvider
 from variables import ProjectVariables
+from imports.vpc import Vpc
 
 
 class MyStack(TerraformStack):
