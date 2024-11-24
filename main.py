@@ -40,7 +40,7 @@ class LabFolio2Stack(TerraformStack):
                                              tags={"Name": "cdktf-sg-tag"}
                                              )
 
-        # Ingress rule to allow incoming http and ssh traffic from anywhere on port 80
+        # Ingress rule to allow incoming http and ssh traffic from anywhere on port 22
         VpcSecurityGroupIngressRule(self, "stack_sg_ingress",
                                     ip_protocol="TCP",
                                     from_port=22,
