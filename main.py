@@ -19,10 +19,11 @@ class LabFolio2Stack(TerraformStack):
         # Creating an instance of the variables class and adding the AWS provider
         vars = ProjectVariables(self, "main")
         AwsProvider(self, "aws",
-                    region=vars.region)
+                    region=vars.region
+                    )
 
         # Adding instances of the VPC, Security Group and EC2 Instance
-        # VPC Instance with cidr, public and private subnets, azs and a NAT Gateway
+        # VPC Instance with cidr, public and private subnets and availability zones (azs)
         cdktf_vpc = Vpc(self, "cdktf_vpc",
                         name="jason_tf_vpc",
                         cidr=vars.cidr_vpc,
@@ -30,15 +31,14 @@ class LabFolio2Stack(TerraformStack):
                         private_subnets=vars.priv_sub,
                         azs=vars.azs,
                         instance_tenancy="default",
-                        # enable_nat_gateway=True,
-
                         )
 
         # Security Group with Ingress and Egress rules
         cdktf_security_group = SecurityGroup(self, "stack_sg",
                                              vpc_id=Token().as_string(cdktf_vpc.vpc_id_output),
                                              name="cdktf-sg",
-                                             tags={"Name": "cdktf-sg-tag"})
+                                             tags={"Name": "cdktf-sg-tag"}
+                                             )
 
         # Ingress rule to allow incoming http and ssh traffic from anywhere on port 80
         VpcSecurityGroupIngressRule(self, "stack_sg_ingress",
@@ -46,13 +46,15 @@ class LabFolio2Stack(TerraformStack):
                                     from_port=22,
                                     to_port=22,
                                     cidr_ipv4="0.0.0.0/0",
-                                    security_group_id=cdktf_security_group.id)
+                                    security_group_id=cdktf_security_group.id
+                                    )
 
         # Egress rule to allow traffic out to anywhere
         VpcSecurityGroupEgressRule(self, "stack_sg_egress",
                                    ip_protocol="-1",
                                    cidr_ipv4="0.0.0.0/0",
-                                   security_group_id=cdktf_security_group.id)
+                                   security_group_id=cdktf_security_group.id
+                                   )
 
         # Adding the EC2 Instance and assigning it to the above VPC and Security Group
         cdktf_instance = Instance(self, "jason-cdk-instance",

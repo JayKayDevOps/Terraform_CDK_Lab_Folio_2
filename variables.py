@@ -1,3 +1,4 @@
+# Variables class to store all the VPC and EC2 Instance variables
 from constructs import Construct
 
 
